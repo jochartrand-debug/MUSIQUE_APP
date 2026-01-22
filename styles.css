@@ -44,6 +44,7 @@ body {
 }
 
 .content {
+  text-align: center;
   font-size: clamp(34px, 5.2vw, 54px);
   line-height: 1.12;
   font-weight: 750;
@@ -66,12 +67,16 @@ body {
 
 /* Question sur 2 lignes : tailles différenciées */
 .q-line1{
+  width: 100%;
+  text-align: center;
   display:block;
   font-size: clamp(96px, 18vw, 180px);
   line-height: 1.0;
 }
 
 .q-line2{
+  width: 100%;
+  text-align: center;
   display:block;
   font-size: clamp(56px, 10vw, 96px);
   line-height: 1.1;
