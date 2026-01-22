@@ -61,9 +61,25 @@ function shuffledIndices(n) {
   return a;
 }
 
+
+function formatQuestionTwoLines(q) {
+  const s = (q ?? "").trim();
+
+  if (s.includes("\n")) return s;
+
+  const m = s.match(/^(\S+)\s+(.+)$/);
+  if (m) return `${m[1]}\n${m[2].trim()}`;
+
+  const m2 = s.match(/^([A-G](?:♭|♯)?)\s*(.+)$/);
+  if (m2 && m2[2]) return `${m2[1]}\n${m2[2].trim()}`;
+
+  return s;
+}
+
 // ---------------- UI ----------------
 const card = document.getElementById("card");
 const elContent = document.getElementById("content");
+const homeImg = document.getElementById("homeImg");
 const tapArea = document.getElementById("tapArea");
 
 // État
@@ -105,12 +121,13 @@ function render() {
   card.className = "card " + state.mode;
 
   if (state.mode === "home") {
-    setTextWithFade("Touchez l’écran pour commencer.");
-    return;
-  }
+  card.className = "card home";
+  if (homeImg) homeImg.src = "assets/accueil.png";
+  return;
+}
 
   if (state.mode === "question") {
-    setTextWithFade(data[state.currentIndex]?.q ?? "—");
+    setTextWithFade(formatQuestionTwoLines(data[state.currentIndex]?.q ?? "—"));
     return;
   }
 
@@ -157,6 +174,10 @@ async function boot() {
 
   const saved = await idbGet("state");
   if (saved && typeof saved === "object") state = saved;
+
+  // Toujours démarrer à l’accueil (évite de reprendre sur une question après une session)
+  state.mode = "home";
+  state.currentIndex = null;
 
   // Si data.json a changé, on reconstruit
   if (!Array.isArray(state.deck) || state.deck.length !== data.length) {
