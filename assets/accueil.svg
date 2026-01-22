@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1170 2532">
+  <rect width="1170" height="2532" fill="#000"/>
+  <!-- Quadruple croche centrée (même proportions que l’icône) -->
+  <g transform="translate(585 1266) scale(1.1) translate(-585 -1266)">
+    <!-- Têtes -->
+    <g fill="#fff">
+      <ellipse cx="470" cy="1500" rx="70" ry="52" transform="rotate(-18 470 1500)"/>
+      <ellipse cx="580" cy="1450" rx="70" ry="52" transform="rotate(-18 580 1450)"/>
+      <ellipse cx="690" cy="1400" rx="70" ry="52" transform="rotate(-18 690 1400)"/>
+      <ellipse cx="800" cy="1350" rx="70" ry="52" transform="rotate(-18 800 1350)"/>
+    </g>
+
+    <!-- Hampe -->
+    <g stroke="#fff" stroke-width="26" stroke-linecap="round">
+      <line x1="520" y1="1470" x2="520" y2="950"/>
+      <line x1="630" y1="1420" x2="630" y2="940"/>
+      <line x1="740" y1="1370" x2="740" y2="930"/>
+      <line x1="850" y1="1320" x2="850" y2="920"/>
+    </g>
+
+    <!-- Barres (4) -->
+    <g fill="#fff">
+      <path d="M505 950 L880 915 L880 955 L505 990 Z"/>
+      <path d="M505 1015 L880 980 L880 1020 L505 1055 Z"/>
+      <path d="M505 1080 L880 1045 L880 1085 L505 1120 Z"/>
+      <path d="M505 1145 L880 1110 L880 1150 L505 1185 Z"/>
+    </g>
+  </g>
+</svg>

@@ -1,5 +1,3 @@
-html, body { height: 100%; margin: 0; }
-
 :root { --pad: 18px; }
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
@@ -10,33 +8,27 @@ body {
 
 .screen {
   min-height: 100vh;
-  min-height: 100dvh; /* iOS récent : vraie hauteur visible */
+  min-height: 100dvh;
   display: grid;
-  place-items: stretch;
+  place-items: center;
   padding: 0;
   touch-action: manipulation;
   user-select: none;
   -webkit-user-select: none;
 }
 
+/* Carte pédagogique */
+.card {
+  width: min(92vw, 980px);
+  min-height: 70vh;
 
-@media (max-width: 700px) {
-  .card {
-    width: 100vw;
-    height: 100vh;
-    height: 100dvh; /* iOS récent */
-    min-height: 100dvh;
-    border-radius: 0;
-    box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    /* Safe areas (encoche + bas) */
-    padding-top: max(24px, env(safe-area-inset-top));
-    padding-right: max(24px, env(safe-area-inset-right));
-    padding-bottom: max(24px, env(safe-area-inset-bottom));
-    padding-left: max(24px, env(safe-area-inset-left));
-  }
+  padding: var(--pad);
+  border-radius: 18px;
 }
-
 
 /* Question / Accueil : blanc sur noir */
 .card.home,
