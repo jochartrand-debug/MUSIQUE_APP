@@ -1,13 +1,11 @@
-const CACHE = "intervalles-cache-v17";
+const CACHE = "intervalles-cache-v18";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js",
   "./manifest.webmanifest",
-  "./data.json",
-  "./assets/accueil.svg",
-  "./assets/accueil.png",
+  "./data.json",  "./assets/accueil.png",
   "./favicon.ico",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
