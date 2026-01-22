@@ -62,18 +62,34 @@ function shuffledIndices(n) {
 }
 
 
+
+
+
 function formatQuestionTwoLines(q) {
-  const s = (q ?? "").trim();
+  const s = (q ?? '').trim();
+  if (!s) return '';
 
-  if (s.includes("\n")) return s;
+  let line1 = s;
+  let line2 = '';
 
-  const m = s.match(/^(\S+)\s+(.+)$/);
-  if (m) return `${m[1]}\n${m[2].trim()}`;
+  if (s.includes('\n')) {
+    [line1, line2] = s.split('\n', 2);
+  } else {
+    const m = s.match(/^(\S+)\s+(.+)$/);
+    if (m) {
+      line1 = m[1];
+      line2 = m[2];
+    } else {
+      const m2 = s.match(/^([A-G](?:♭|♯)?)\s*(.+)$/);
+      if (m2) {
+        line1 = m2[1];
+        line2 = m2[2];
+      }
+    }
+  }
 
-  const m2 = s.match(/^([A-G](?:♭|♯)?)\s*(.+)$/);
-  if (m2 && m2[2]) return `${m2[1]}\n${m2[2].trim()}`;
-
-  return s;
+  if (!line2) return line1;
+  return `<span class="q-line1">${line1}</span>\n<span class="q-line2">${line2}</span>`;
 }
 
 // ---------------- UI ----------------
@@ -127,7 +143,7 @@ function render() {
 }
 
   if (state.mode === "question") {
-    setTextWithFade(formatQuestionTwoLines(data[state.currentIndex]?.q ?? "—"));
+    elContent.innerHTML = formatQuestionTwoLines(data[state.currentIndex]?.q ?? "—");
     return;
   }
 

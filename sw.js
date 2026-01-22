@@ -1,4 +1,4 @@
-const CACHE = "intervalles-cache-v12";
+const CACHE = "intervalles-cache-v15";
 const ASSETS = [
   "./",
   "./index.html",
@@ -6,6 +6,7 @@ const ASSETS = [
   "./app.js",
   "./manifest.webmanifest",
   "./data.json",
+  "./assets/accueil.svg",
   "./assets/accueil.png",
   "./favicon.ico",
   "./icons/icon-192.png",
