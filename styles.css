@@ -1,3 +1,8 @@
+html{
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+
 :root { --pad: 18px; }
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
@@ -87,4 +92,103 @@ body {
 .card.answer .content{
   font-size: clamp(96px, 18vw, 180px);
   line-height: 1.05;
+}
+
+@font-face {
+  font-family: "BravuraText";
+  src: url("fonts/BravuraText.woff2") format("woff2"),
+       url("fonts/BravuraText.woff") format("woff");
+  font-display: block;
+}
+
+.content, .q-line1, .q-line2, .a-line {
+  font-family: "BravuraText", system-ui, -apple-system, Arial, sans-serif;
+}
+
+.content{
+  width:100%;
+  text-align:center;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  font-kerning: none;
+}
+
+
+/* ---------------- Thème pédagogique (question/ réponse inversables) ---------------- */
+:root{
+  --q-bg:#000;
+  --q-fg:#fff;
+  --a-bg:#fff;
+  --a-fg:#000;
+  --ui-fg: rgba(255,255,255,0.85);
+  --ui-bg: rgba(0,0,0,0.35);
+}
+
+:root[data-scheme="invert"]{
+  --q-bg:#fff;
+  --q-fg:#000;
+  --a-bg:#000;
+  --a-fg:#fff;
+  --ui-fg: rgba(0,0,0,0.85);
+  --ui-bg: rgba(255,255,255,0.35);
+}
+
+/* Applique les couleurs aux cartes */
+.card.question{
+  background: var(--q-bg);
+  color: var(--q-fg);
+}
+.card.answer{
+  background: var(--a-bg);
+  color: var(--a-fg);
+}
+
+/* Bouton thème (discret) */
+.theme-toggle{
+  position: fixed;
+  top: calc(10px + env(safe-area-inset-top));
+  right: calc(10px + env(safe-area-inset-right));
+  z-index: 50;
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: var(--ui-bg);
+  color: var(--ui-fg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size: 22px;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+:root[data-scheme="invert"] .theme-toggle{
+  border-color: rgba(0,0,0,0.18);
+}
+
+/* ---------------- Espacement "musical" (optique) ---------------- */
+.q-line1{
+  margin-bottom: 0.10em;
+}
+.q-line2{
+  margin-top: 0.02em;
+  /* légèrement resserré pour éviter l'effet "trop loin" sur gros corps */
+  letter-spacing: 0.01em;
+}
+
+/* ---------------- Animation légère à l'apparition de la réponse ---------------- */
+.card.answer .content{
+  opacity: 0;
+  transform: translateY(8px) scale(0.995);
+  transition: opacity 180ms ease, transform 180ms ease;
+  will-change: opacity, transform;
+}
+.card.answer.is-ready .content{
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Respect accessibilité */
+@media (prefers-reduced-motion: reduce){
+  .card.answer .content{ transition:none; transform:none; opacity:1; }
 }

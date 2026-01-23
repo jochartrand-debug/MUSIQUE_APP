@@ -96,6 +96,27 @@ function formatQuestionTwoLines(q) {
 const card = document.getElementById("card");
 const elContent = document.getElementById("content");
 const homeImg = document.getElementById("homeImg");
+
+const themeToggleBtn = document.getElementById("themeToggle");
+
+function applyScheme(scheme){
+  if (scheme === "invert") {
+    document.documentElement.setAttribute("data-scheme", "invert");
+    if (themeToggleBtn) themeToggleBtn.textContent = "☀︎";
+  } else {
+    document.documentElement.removeAttribute("data-scheme");
+    if (themeToggleBtn) themeToggleBtn.textContent = "☾";
+  }
+}
+
+function getSavedScheme(){
+  try { return localStorage.getItem("scheme") || "normal"; } catch { return "normal"; }
+}
+
+function saveScheme(s){
+  try { localStorage.setItem("scheme", s); } catch {}
+}
+
 const tapArea = document.getElementById("tapArea");
 
 // État
@@ -182,6 +203,19 @@ async function handleTap() {
 }
 
 async function boot() {
+  // Thème pédagogique (question/réponse inversables)
+  applyScheme(getSavedScheme());
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const next = (document.documentElement.getAttribute("data-scheme") === "invert") ? "normal" : "invert";
+      applyScheme(next);
+      saveScheme(next);
+    });
+  }
+
+  if (document.fonts && document.fonts.ready) { await document.fonts.ready; }
+
   if ("serviceWorker" in navigator) {
     try { await navigator.serviceWorker.register("sw.js"); } catch {}
   }
