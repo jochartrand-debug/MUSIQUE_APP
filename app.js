@@ -165,6 +165,15 @@ function pickNextQuestion() {
 }
 
 // Petite transition douce du texte
+function flashAnswer(){
+  const el = document.body;
+  el.classList.remove("flash-answer");
+  requestAnimationFrame(() => {
+    el.classList.add("flash-answer");
+    setTimeout(() => el.classList.remove("flash-answer"), 200);
+  });
+}
+
 function render() {
   card.className = "card " + state.mode;
 
@@ -181,6 +190,8 @@ function render() {
 
   if (state.mode === "answer") {
     const answer = data[state.currentIndex]?.a ?? "—";
+    flashAnswer();
+    flashAnswer();
     elContent.innerHTML = `<span class="a-line">${renderNoteMarkup(answer)}</span>`;
     return;
   }

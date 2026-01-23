@@ -152,29 +152,7 @@ body {
 }
 
 /* Bouton thème (discret) */
-.theme-toggle{
-  position: fixed;
-  top: calc(10px + env(safe-area-inset-top));
-  right: calc(10px + env(safe-area-inset-right));
-  z-index: 50;
-  width: 44px;
-  height: 44px;
-  border-radius: 22px;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: var(--ui-bg);
-  color: var(--ui-fg);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size: 22px;
-  line-height: 1;
-  -webkit-tap-highlight-color: transparent;
-}
-:root[data-scheme="invert"] .theme-toggle{
-  border-color: rgba(0,0,0,0.18);
-}
-
-/* ---------------- Espacement "musical" (optique) ---------------- */
+:root[data-scheme="invert"] /* ---------------- Espacement "musical" (optique) ---------------- */
 .q-line1{
   margin-bottom: 0.10em;
 }
@@ -222,4 +200,26 @@ body {
 .accidental{
   font-family: "BravuraText", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
   font-weight: 400 !important;
+}
+
+/* Flash pédagogique (overlay fixe) - seulement lors de la réponse */
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+.flash-answer::before{
+  animation: flashOverlay 140ms ease-out;
+}
+@keyframes flashOverlay{
+  0%{opacity:0;}
+  35%{opacity:1;}
+  100%{opacity:0;}
+}
+@media (prefers-reduced-motion: reduce){
+  .flash-answer::before{ animation:none; }
 }
