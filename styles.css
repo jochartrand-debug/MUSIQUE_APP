@@ -72,20 +72,23 @@ body {
 
 /* Question sur 2 lignes : tailles différenciées */
 .q-line1{
+  display:block;
   width: 100%;
   text-align: center;
-  display:block;
-  font-size: clamp(96px, 18vw, 180px);
+  font-size: clamp(96px, min(18vw, 14svh), 180px);
   line-height: 1.0;
+  margin-bottom: 0.10em;
 }
 
 .q-line2{
+  display:block;
   width: 100%;
   text-align: center;
-  display:block;
-  font-size: clamp(56px, 10vw, 96px);
+  font-size: clamp(56px, min(10vw, 8svh), 96px);
   line-height: 1.1;
   opacity: 0.9;
+  margin-top: 0.02em;
+  letter-spacing: 0.01em;
 }
 
 /* Réponses : même taille que la 1re ligne des questions */
@@ -176,19 +179,12 @@ body {
   letter-spacing: 0.01em;
 }
 
-/* ---------------- Animation légère à l'apparition de la réponse ---------------- */
-.card.answer .content{
-  opacity: 0;
-  transform: translateY(8px) scale(0.995);
-  transition: opacity 180ms ease, transform 180ms ease;
-  will-change: opacity, transform;
-}
-.card.answer.is-ready .content{
-  opacity: 1;
-  transform: translateY(0) scale(1);
 }
 
-/* Respect accessibilité */
-@media (prefers-reduced-motion: reduce){
-  .card.answer .content{ transition:none; transform:none; opacity:1; }
+.a-line{
+  display:block;
+  width:100%;
+  text-align:center;
+  font-size: clamp(96px, min(18vw, 14svh), 180px);
+  line-height: 1.05;
 }
