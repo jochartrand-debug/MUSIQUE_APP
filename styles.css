@@ -1,3 +1,12 @@
+
+@font-face{
+  font-family: "InterBold";
+  src: url("fonts/Inter-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+}
+
+
 html{
   -webkit-text-size-adjust:100%;
   text-size-adjust:100%;
@@ -102,9 +111,7 @@ body {
   font-display: block;
 }
 
-.content, .q-line1, .q-line2, .a-line {
-  font-family: "BravuraText", system-ui, -apple-system, Arial, sans-serif;
-}
+.content, .q-line1, .q-line2, 
 
 .content{
   width:100%;
@@ -179,18 +186,11 @@ body {
 
 }
 
-.a-line{
-  display:block;
-  width:100%;
-  text-align:center;
-  font-size: clamp(96px, min(18vw, 14svh), 180px);
-  line-height: 1.05;
-}
+
 
 /* --- Contrôle du gras musical --- */
 .q-line1{
-  font-weight: 700;
-}
+  }
 .q-line1 .accidental{ font-weight: 400 !important; }
 
 /* Deuxième ligne : jamais en gras */
@@ -199,14 +199,27 @@ body {
 }
 
 /* Réponses : même règle que ligne 1 des questions */
-.a-line{
-  font-weight: 700;
-}
+
 .a-line .accidental{ font-weight: 400 !important; }
 
-.q-line1, .a-line{
-  font-weight: 700;
-}
+.q-line1, 
 .q-line2{
   font-weight: 400;
+}
+
+/* Réponses : texte en gras, altérations normales */
+.a-line{
+  }
+.a-line .accidental{
+  font-weight: 400 !important;
+}
+
+/* Lettre de note en gras (police système), altération en Bravura */
+.note-letter{
+  font-family:"InterBold", system-ui, -apple-system, sans-serif;
+  font-weight:700;
+}
+.accidental{
+  font-family: "BravuraText", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  font-weight: 400 !important;
 }

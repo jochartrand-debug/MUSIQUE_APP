@@ -88,8 +88,8 @@ function formatQuestionTwoLines(q) {
     }
   }
 
-  if (!line2) return wrapAccidentals(line1);
-  return `<span class="q-line1">${wrapAccidentals(line1)}</span>
+  if (!line2) return renderNoteMarkup(line1);
+  return `<span class="q-line1">${renderNoteMarkup(line1)}</span>
 <span class="q-line2">${wrapAccidentals(line2)}</span>`;
 }
 
@@ -98,6 +98,19 @@ function wrapAccidentals(str){
     .replace(/([#♯])/g, '<span class="accidental">$1</span>')
     .replace(/([b♭])/g, '<span class="accidental">$1</span>');
 }
+
+function renderNoteMarkup(str){
+  const s = String(str ?? "");
+  const m = s.match(/^\s*([A-Ga-g])\s*([#♯b♭])?\s*$/);
+  if (!m) return wrapAccidentals(s);
+  const letter = m[1].toUpperCase();
+  const acc = m[2] ? m[2] : "";
+  const accNorm = acc === "#" ? "♯" : (acc === "b" ? "♭" : acc);
+  if (!accNorm) return `<span class="note-letter">${letter}</span>`;
+  return `<span class="note-letter">${letter}</span><span class="accidental">${accNorm}</span>`;
+}
+
+
 
 // ---------------- UI ----------------
 const card = document.getElementById("card");
@@ -168,7 +181,7 @@ function render() {
 
   if (state.mode === "answer") {
     const answer = data[state.currentIndex]?.a ?? "—";
-    elContent.innerHTML = `<span class="a-line">${wrapAccidentals(answer)}</span>`;
+    elContent.innerHTML = `<span class="a-line">${renderNoteMarkup(answer)}</span>`;
     return;
   }
 }
