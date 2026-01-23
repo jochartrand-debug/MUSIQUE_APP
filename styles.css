@@ -223,3 +223,21 @@ body {
   font-family: "BravuraText", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
   font-weight: 400 !important;
 }
+
+/* Flash pédagogique (overlay fixe, n'affecte pas la mise en page) */
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+.flash-answer::before{ animation: flashOverlay 140ms ease-out; }
+@keyframes flashOverlay{
+  0%{opacity:0;} 35%{opacity:1;} 100%{opacity:0;}
+}
+@media (prefers-reduced-motion: reduce){
+  .flash-answer::before{ animation: none; }
+}

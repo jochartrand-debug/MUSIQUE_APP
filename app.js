@@ -165,6 +165,21 @@ function pickNextQuestion() {
 }
 
 // Petite transition douce du texte
+let tapLocked = false;
+function lockTap(ms=220){
+  tapLocked = true;
+  setTimeout(()=>{ tapLocked = false; }, ms);
+}
+
+function flashAnswer(){
+  const el = document.body;
+  el.classList.remove("flash-answer");
+  requestAnimationFrame(() => {
+    el.classList.add("flash-answer");
+    setTimeout(() => el.classList.remove("flash-answer"), 200);
+  });
+}
+
 function render() {
   card.className = "card " + state.mode;
 
@@ -181,6 +196,7 @@ function render() {
 
   if (state.mode === "answer") {
     const answer = data[state.currentIndex]?.a ?? "—";
+    flashAnswer();
     elContent.innerHTML = `<span class="a-line">${renderNoteMarkup(answer)}</span>`;
     return;
   }
@@ -192,6 +208,8 @@ function render() {
 // Réponse -> Nouvelle question (sans répétition)
 // Après toutes les paires -> retour Accueil + reset
 async function handleTap() {
+  if (tapLocked) return;
+  lockTap();
   if (state.mode === "home") {
     pickNextQuestion();
     render();
@@ -249,6 +267,20 @@ async function boot() {
 
   render();
   await idbSet("state", state);
+
+
+  // Un seul "tap" fiable (évite double déclenchement iOS)
+  if (window.PointerEvent) {
+    tapArea.addEventListener("pointerup", (e) => {
+      e.preventDefault();
+      handleTap();
+    });
+  } else {
+    tapArea.addEventListener("touchend", (e) => {
+      e.preventDefault();
+      handleTap();
+    }, { passive: false });
+  }
 
   tapArea.addEventListener("click", handleTap);
   tapArea.addEventListener("touchend", (e) => {
