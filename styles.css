@@ -188,3 +188,24 @@ body {
   font-size: clamp(96px, min(18vw, 14svh), 180px);
   line-height: 1.05;
 }
+
+/* --- Contrôle du gras musical --- */
+.q-line1{
+  font-weight: 700;
+}
+.q-line1 .accidental{
+  font-weight: 400;
+}
+
+/* Deuxième ligne : jamais en gras */
+.q-line2{
+  font-weight: 400;
+}
+
+/* Réponses : même règle que ligne 1 des questions */
+.a-line{
+  font-weight: 700;
+}
+.a-line .accidental{
+  font-weight: 400;
+}
