@@ -202,22 +202,25 @@ body {
   font-weight: 400 !important;
 }
 
-/* Flash pédagogique (overlay fixe) - seulement lors de la réponse */
+}
+
+/* Transition minimaliste "dim pulse" (overlay fixe, n'affecte pas la mise en page)
+   Déclenchée seulement à l'apparition de la réponse. */
 body::before{
   content:"";
   position: fixed;
   inset: 0;
-  background: #fff;
+  background: #000;
   opacity: 0;
   pointer-events: none;
   z-index: 5;
 }
 .flash-answer::before{
-  animation: flashOverlay 140ms ease-out;
+  animation: dimPulse 140ms ease-out;
 }
-@keyframes flashOverlay{
+@keyframes dimPulse{
   0%{opacity:0;}
-  35%{opacity:1;}
+  40%{opacity:0.12;}
   100%{opacity:0;}
 }
 @media (prefers-reduced-motion: reduce){
