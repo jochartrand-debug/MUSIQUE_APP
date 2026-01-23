@@ -1,8 +1,8 @@
 
 @font-face{
-  font-family: "InterBold";
-  src: url("fonts/Inter-Bold.woff2") format("woff2");
-  font-weight: 700;
+  font-family: "InterExtraBold";
+  src: url("fonts/Inter-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
   font-style: normal;
 }
 
@@ -216,8 +216,8 @@ body {
 
 /* Lettre de note en gras (police système), altération en Bravura */
 .note-letter{
-  font-family:"InterBold", system-ui, -apple-system, sans-serif;
-  font-weight:700;
+  font-family:"InterExtraBold", system-ui, -apple-system, sans-serif;
+  font-weight:800;
 }
 .accidental{
   font-family: "BravuraText", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
