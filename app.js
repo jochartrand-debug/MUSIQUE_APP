@@ -88,8 +88,15 @@ function formatQuestionTwoLines(q) {
     }
   }
 
-  if (!line2) return line1;
-  return `<span class="q-line1">${line1}</span>\n<span class="q-line2">${line2}</span>`;
+  if (!line2) return wrapAccidentals(line1);
+  return `<span class="q-line1">${wrapAccidentals(line1)}</span>
+<span class="q-line2">${wrapAccidentals(line2)}</span>`;
+}
+
+function wrapAccidentals(str){
+  return String(str ?? "")
+    .replace(/([#♯])/g, '<span class="accidental">$1</span>')
+    .replace(/([b♭])/g, '<span class="accidental">$1</span>');
 }
 
 // ---------------- UI ----------------
@@ -145,15 +152,6 @@ function pickNextQuestion() {
 }
 
 // Petite transition douce du texte
-function setTextWithFade(nextText) {
-  elContent.style.opacity = "0";
-  window.setTimeout(() => {
-    elContent.textContent = nextText;
-    // rAF pour garantir le repaint
-    requestAnimationFrame(() => { elContent.style.opacity = "1"; });
-  }, 120);
-}
-
 function render() {
   card.className = "card " + state.mode;
 
@@ -169,7 +167,8 @@ function render() {
   }
 
   if (state.mode === "answer") {
-    setTextWithFade(data[state.currentIndex]?.a ?? "—");
+    const answer = data[state.currentIndex]?.a ?? "—";
+    elContent.innerHTML = `<span class="a-line">${wrapAccidentals(answer)}</span>`;
     return;
   }
 }

@@ -55,9 +55,6 @@ body {
   font-weight: 750;
   white-space: pre-line;
   letter-spacing: 0.2px;
-
-  opacity: 1;
-  transition: opacity 160ms ease;
 }
 
 /* Accueil (image) */
@@ -100,7 +97,8 @@ body {
 @font-face {
   font-family: "BravuraText";
   src: url("fonts/BravuraText.woff2") format("woff2"),
-       url("fonts/BravuraText.woff") format("woff");
+       url("fonts/BravuraText.woff") format("woff"),
+       url("fonts/BravuraText.otf") format("opentype");
   font-display: block;
 }
 
@@ -193,9 +191,7 @@ body {
 .q-line1{
   font-weight: 700;
 }
-.q-line1 .accidental{
-  font-weight: 400;
-}
+.q-line1 .accidental{ font-weight: 400 !important; }
 
 /* Deuxième ligne : jamais en gras */
 .q-line2{
@@ -206,6 +202,11 @@ body {
 .a-line{
   font-weight: 700;
 }
-.a-line .accidental{
+.a-line .accidental{ font-weight: 400 !important; }
+
+.q-line1, .a-line{
+  font-weight: 700;
+}
+.q-line2{
   font-weight: 400;
 }
