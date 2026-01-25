@@ -1,3 +1,15 @@
+// --- Anti double-tap lock (v43) ---
+let __tapLocked = false;
+function __withTapLock(fn, delay=300){
+  return function(...args){
+    if (__tapLocked) return;
+    __tapLocked = true;
+    try { fn.apply(this, args); }
+    finally { setTimeout(()=>{ __tapLocked = false; }, delay); }
+  }
+}
+// --- end anti double-tap ---
+
 // ---------------- IndexedDB ----------------
 const DB_NAME = "intervalles_pwa";
 const DB_VER = 1;
@@ -261,7 +273,7 @@ async function boot() {
   render();
   await idbSet("state", state);
 
-  tapArea.addEventListener("click", handleTap);
+  tapArea.addEventListener('click', __withTapLock(handleTap));
   tapArea.addEventListener("touchend", (e) => {
     e.preventDefault();
     handleTap();
