@@ -1,4 +1,17 @@
+/* =========================
+   CORRECTION FOND ACCUEIL
+   ========================= */
 
+/* Fond noir UNIQUEMENT pour l'écran d'accueil */
+.screen:has(.card.home) {
+  background-color: #000;
+}
+
+
+
+/* =========================
+   STYLES EXISTANTS (inchangés)
+   ========================= */
 
 @font-face{
   font-family: "InterExtraBold";
@@ -6,7 +19,6 @@
   font-weight: 800;
   font-style: normal;
 }
-
 
 html{
   -webkit-text-size-adjust:100%;
@@ -16,6 +28,7 @@ html{
 :root { --pad: 18px; }
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
+
 body {
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   background: #0f0f10;
@@ -112,9 +125,7 @@ body {
   font-display: block;
 }
 
-.content, .q-line1, .q-line2, 
-
-.content{
+.content, .q-line1, .q-line2{
   width:100%;
   text-align:center;
   text-rendering: geometricPrecision;
@@ -122,8 +133,7 @@ body {
   font-kerning: none;
 }
 
-
-/* ---------------- Thème pédagogique (question/ réponse inversables) ---------------- */
+/* ---------------- Thème pédagogique ---------------- */
 :root{
   --q-bg:#000;
   --q-fg:#fff;
@@ -142,7 +152,6 @@ body {
   --ui-bg: rgba(255,255,255,0.35);
 }
 
-/* Applique les couleurs aux cartes */
 .card.question{
   background: var(--q-bg);
   color: var(--q-fg);
@@ -152,48 +161,11 @@ body {
   color: var(--a-fg);
 }
 
-/* Bouton thème (discret) */
-:root[data-scheme="invert"] /* ---------------- Espacement "musical" (optique) ---------------- */
-.q-line1{
-  margin-bottom: 0.10em;
-}
-.q-line2{
-  margin-top: 0.02em;
-  /* légèrement resserré pour éviter l'effet "trop loin" sur gros corps */
-  letter-spacing: 0.01em;
-}
-
-}
-
-
-
-/* --- Contrôle du gras musical --- */
-.q-line1{
-  }
-.q-line1 .accidental{ font-weight: 400 !important; }
-
-/* Deuxième ligne : jamais en gras */
-.q-line2{
-  font-weight: 400;
-}
-
-/* Réponses : même règle que ligne 1 des questions */
-
+/* --- Typographie musicale --- */
+.q-line1, .q-line2{ font-weight: 400; }
+.q-line1 .accidental,
 .a-line .accidental{ font-weight: 400 !important; }
 
-.q-line1, 
-.q-line2{
-  font-weight: 400;
-}
-
-/* Réponses : texte en gras, altérations normales */
-.a-line{
-  }
-.a-line .accidental{
-  font-weight: 400 !important;
-}
-
-/* Lettre de note en gras (police système), altération en Bravura */
 .note-letter{
   font-family:"InterExtraBold", system-ui, -apple-system, sans-serif;
   font-weight:800;
@@ -203,10 +175,7 @@ body {
   font-weight: 400 !important;
 }
 
-}
-
-/* Transition minimaliste "dim pulse" (overlay fixe, n'affecte pas la mise en page)
-   Déclenchée seulement à l'apparition de la réponse. */
+/* --- Transition "dim pulse" --- */
 body::before{
   content:"";
   position: fixed;
