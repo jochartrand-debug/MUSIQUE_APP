@@ -203,7 +203,6 @@ function render() {
   if (state.mode === "answer") {
     const answer = data[state.currentIndex]?.a ?? "—";
     flashAnswer();
-    flashAnswer();
     elContent.innerHTML = `<span class="a-line">${renderNoteMarkup(answer)}</span>`;
     return;
   }
@@ -273,11 +272,24 @@ async function boot() {
   render();
   await idbSet("state", state);
 
-  tapArea.addEventListener('click', __withTapLock(handleTap));
+  // --- Robust anti double-tap (touch + click) ---
+  // iOS déclenche souvent: touchend -> click (après ~300ms).
+  // On traite touchend et on supprime le click suivant.
+  const __lockedHandleTap = __withTapLock(handleTap, 350);
+  let __suppressClickUntil = 0;
+
   tapArea.addEventListener("touchend", (e) => {
     e.preventDefault();
-    handleTap();
+    __suppressClickUntil = Date.now() + 450;
+    __lockedHandleTap();
   }, { passive: false });
+
+  tapArea.addEventListener("click", (e) => {
+    if (Date.now() < __suppressClickUntil) return;
+    e.preventDefault();
+    __lockedHandleTap();
+  });
+// --- end robust anti double-tap ---
 }
 
 boot().catch(err => {
