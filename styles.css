@@ -1,9 +1,4 @@
 
-/* Fond noir UNIQUEMENT pour la page d'accueil */
-body.home {
-    background-color: #000 !important;
-}
-
 
 @font-face{
   font-family: "InterExtraBold";
