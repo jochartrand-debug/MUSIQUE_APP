@@ -38,14 +38,6 @@
   font-display: swap;
 }
 @font-face{
-  font-family: "STIXTwoText-Italic";
-  src: url("fonts/STIXTwoText-Italic.ttf") format("truetype");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face{
   font-family: "BravuraText";
   src: url("fonts/BravuraText.woff2") format("woff2"),
        url("fonts/BravuraText.woff") format("woff"),
@@ -54,6 +46,15 @@
   font-style: normal;
   font-display: block;
 }
+
+@font-face{
+  font-family: "STIXTwoTextItalic";
+  src: url("fonts/STIXTwoText-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
 
 html, body { height: 100%; margin: 0; }
 body{
@@ -133,11 +134,7 @@ body{
   line-height: 1.1;
 }
 
-.italic{
-  font-family: "STIXTwoText-Italic", "Times New Roman", Georgia, serif !important;
-  font-style: italic;
-  font-weight: 400 !important;
-}
+.italic{ font-style: italic; }
 
 /* ===== DIM GLOBAL (QUESTION → RÉPONSE seulement) ===== */
 body::before{
@@ -184,11 +181,7 @@ body::before{
 .q-line2, .a-line2{
   font-family: "InterSemiBold", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
-.italic{
-  font-family: "STIXTwoText-Italic", "Times New Roman", Georgia, serif !important;
-  font-style: italic;
-  font-weight: 400 !important;
-}
+.italic{ font-family: "InterItalic", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
 
 /* --- Tuiles: fond noir (accueil, question, réponse) --- */
 .card.home,
@@ -309,11 +302,13 @@ body::before{
 }
 
 /* Lettre/symbole en italique: Inter italique réel */
+/* Italique mathématique avec empattements (I, Q, E, etc.) */
 .italic{
-  font-family: "STIXTwoText-Italic", "Times New Roman", Georgia, serif !important;
+  font-family: "STIXTwoTextItalic", "InterItalic", serif !important;
   font-style: italic;
   font-weight: 400 !important;
 }
+
 
 /* === Typographie finale cohérente (v15) === */
 
@@ -346,12 +341,6 @@ body::before{
   font-weight: 400 !important;
 }
 
-/* Lettre/symbole en italique */
-.italic{
-  font-family: "STIXTwoText-Italic", "Times New Roman", Georgia, serif !important;
-  font-style: italic;
-  font-weight: 400 !important;
-}
 
 /* === Correctif v16 : empêcher le retour à la ligne sur le titre === */
 .q-line1{
@@ -433,11 +422,3 @@ body{
 .q-line1,.q-line2,.a-line1,.a-line2{ display:inline-block; max-width:100%; }
 .q-line1,.a-line1{ white-space:nowrap; }
 .q-line2,.a-line2{ white-space:normal; }
-
-
-/* Italique typographe (si le contenu utilise <i> ou <em>) */
-i, em{
-  font-family: "STIXTwoText-Italic", "Times New Roman", Georgia, serif;
-  font-style: italic;
-  font-weight: 400;
-}
