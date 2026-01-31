@@ -179,11 +179,14 @@ function playAppear() {
 }
 
 function applyPuristItalicMarkup(html){
-  // Convertit <i> / <em> en <span class="italic"> pour que l’italique utilise STIX
-  // (évite le faux italique du navigateur et garantit un I majuscule distinct de l minuscule).
+  // 1) Convertit <i> / <em> en <span class="italic"> pour que l’italique utilise STIX
+  // 2) Auto‑italique pour les variables isolées entre parenthèses, ex: (I), (V), (x)
+  //    => évite l’ambiguïté I vs l même si data.json ne contient pas <i>...</i>.
   return String(html ?? "")
     .replace(/<\s*(i|em)\s*>/gi, '<span class="italic">')
-    .replace(/<\s*\/\s*(i|em)\s*>/gi, '</span>');
+    .replace(/<\s*\/\s*(i|em)\s*>/gi, '</span>')
+    // (I) → (<span class="italic">I</span>)  |  ( x ) → (<span class="italic">x</span>)
+    .replace(/\(\s*([A-Za-z])\s*\)/g, '(<span class="italic">$1</span>)');
 }
 
 function renderPlain(s){

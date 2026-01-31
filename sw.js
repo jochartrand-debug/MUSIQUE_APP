@@ -1,4 +1,4 @@
-const CACHE_NAME = "unites-mesure-v31";
+const CACHE_NAME = "unites-mesure-v32";
 
 /*
   IMPORTANT (PWA) :
