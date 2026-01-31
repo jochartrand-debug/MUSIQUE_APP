@@ -1,142 +1,218 @@
-
-@font-face{
-  font-family: "InterRegular";
-  src: url("fonts/Inter-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+/* Fond noir UNIQUEMENT pour la page d'accueil */
+body.home {
+    background-color: #000 !important;
 }
 
-/* ===== Polices embarquées ===== */
-@font-face{
-  font-family: "InterSemiBold";
-  src: url("fonts/Inter-SemiBold.woff2") format("woff2");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
 
-@font-face{
-  font-family: "InterItalic";
-  src: url("fonts/Inter-Italic.woff2") format("woff2");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-@font-face{
-  font-family: "InterBold";
-  src: url("fonts/Inter-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
+
+
 @font-face{
   font-family: "InterExtraBold";
   src: url("fonts/Inter-ExtraBold.woff2") format("woff2");
   font-weight: 800;
   font-style: normal;
-  font-display: swap;
-}
-@font-face{
-  font-family: "BravuraText";
-  src: url("fonts/BravuraText.woff2") format("woff2"),
-       url("fonts/BravuraText.woff") format("woff"),
-       url("fonts/BravuraText.otf") format("opentype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: block;
-}
-
-@font-face{
-  font-family: "STIXTwoTextItalic";
-  src: url("fonts/STIXTwoText-Italic.ttf") format("truetype");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
 }
 
 
+html{
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+
+:root { --pad: 18px; }
+* { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
-body{
-  background:#000;
-  color:#fff;
+body {
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: #0f0f10;
 }
 
-.screen{
+.screen {
   min-height: 100vh;
   min-height: 100dvh;
   display: grid;
   place-items: center;
+  padding: 0;
   touch-action: manipulation;
   user-select: none;
   -webkit-user-select: none;
 }
 
-.card{
+/* Carte pédagogique */
+.card {
   width: min(92vw, 980px);
   min-height: 70vh;
-  display: grid;
-  place-items: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--pad);
   border-radius: 18px;
-  padding: 18px;
 }
 
-
-
-/* Conteneur cercle + contenu */
-.circle{
-  width: min(78vmin, 640px);
-  height: min(78vmin, 640px);
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  padding: 2.5%;
+/* Question / Accueil : blanc sur noir */
+.card.home,
+.card.question {
+  background: #17181b;
+  color: #ffffff;
 }
 
-/* Cercle blanc seulement pour la QUESTION */
-.card.question .circle{
-  border: 6px solid #fff;
-}
-.card.home .circle,
-.card.answer .circle{
-  border: none;
+/* Réponse : noir sur blanc */
+.card.answer {
+  background: #ffffff;
+  color: #000000;
 }
 
-/* Cache le texte sur l'accueil */
-.card.home #content{ display:none; }
-.card.question #content,
-.card.answer #content{ display:block; }
-
-.content{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  width:auto;
-  max-width:100%;
-  will-change: transform;
-}
-
-.q-line1, .a-line1{
-  display:block;
-  font-size: clamp(64px, 10vw, 140px);
+.content {
+  text-align: center;
+  font-size: clamp(34px, 5.2vw, 54px);
+  line-height: 1.12;
   font-weight: 750;
+  white-space: pre-line;
+  letter-spacing: 0.2px;
+}
+
+/* Accueil (image) */
+.home-image{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.card.home #content{ display:none; }
+.card.question .home-image,
+.card.answer .home-image{ display:none; }
+
+/* Question sur 2 lignes : tailles différenciées */
+.q-line1{
+  display:block;
+  width: 100%;
+  text-align: center;
+  font-size: clamp(96px, min(18vw, 14svh), 180px);
+  line-height: 1.0;
+  margin-bottom: 0.10em;
+}
+
+.q-line2{
+  display:block;
+  width: 100%;
+  text-align: center;
+  font-size: clamp(56px, min(10vw, 8svh), 96px);
+  line-height: 1.1;
+  opacity: 0.9;
+  margin-top: 0.02em;
+  letter-spacing: 0.01em;
+}
+
+/* Réponses : même taille que la 1re ligne des questions */
+.card.answer .content{
+  font-size: clamp(96px, 18vw, 180px);
   line-height: 1.05;
 }
 
-.q-line2, .a-line2{
-  display:block;
-  font-size: clamp(40px, 6vw, 80px);
-  opacity: 0.9;
-  line-height: 1.1;
+@font-face {
+  font-family: "BravuraText";
+  src: url("fonts/BravuraText.woff2") format("woff2"),
+       url("fonts/BravuraText.woff") format("woff"),
+       url("fonts/BravuraText.otf") format("opentype");
+  font-display: block;
 }
 
-.italic{ font-style: italic; }
+.content, .q-line1, .q-line2, 
 
-/* ===== DIM GLOBAL (QUESTION → RÉPONSE seulement) ===== */
+.content{
+  width:100%;
+  text-align:center;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  font-kerning: none;
+}
+
+
+/* ---------------- Thème pédagogique (question/ réponse inversables) ---------------- */
+:root{
+  --q-bg:#000;
+  --q-fg:#fff;
+  --a-bg:#fff;
+  --a-fg:#000;
+  --ui-fg: rgba(255,255,255,0.85);
+  --ui-bg: rgba(0,0,0,0.35);
+}
+
+:root[data-scheme="invert"]{
+  --q-bg:#fff;
+  --q-fg:#000;
+  --a-bg:#000;
+  --a-fg:#fff;
+  --ui-fg: rgba(0,0,0,0.85);
+  --ui-bg: rgba(255,255,255,0.35);
+}
+
+/* Applique les couleurs aux cartes */
+.card.question{
+  background: var(--q-bg);
+  color: var(--q-fg);
+}
+.card.answer{
+  background: var(--a-bg);
+  color: var(--a-fg);
+}
+
+/* Bouton thème (discret) */
+:root[data-scheme="invert"] /* ---------------- Espacement "musical" (optique) ---------------- */
+.q-line1{
+  margin-bottom: 0.10em;
+}
+.q-line2{
+  margin-top: 0.02em;
+  /* légèrement resserré pour éviter l'effet "trop loin" sur gros corps */
+  letter-spacing: 0.01em;
+}
+
+}
+
+
+
+/* --- Contrôle du gras musical --- */
+.q-line1{
+  }
+.q-line1 .accidental{ font-weight: 400 !important; }
+
+/* Deuxième ligne : jamais en gras */
+.q-line2{
+  font-weight: 400;
+}
+
+/* Réponses : même règle que ligne 1 des questions */
+
+.a-line .accidental{ font-weight: 400 !important; }
+
+.q-line1, 
+.q-line2{
+  font-weight: 400;
+}
+
+/* Réponses : texte en gras, altérations normales */
+.a-line{
+  }
+.a-line .accidental{
+  font-weight: 400 !important;
+}
+
+/* Lettre de note en gras (police système), altération en Bravura */
+.note-letter{
+  font-family:"InterExtraBold", system-ui, -apple-system, sans-serif;
+  font-weight:800;
+}
+.accidental{
+  font-family: "BravuraText", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  font-weight: 400 !important;
+}
+
+}
+
+/* Transition minimaliste "dim pulse" (overlay fixe, n'affecte pas la mise en page)
+   Déclenchée seulement à l'apparition de la réponse. */
 body::before{
   content:"";
   position: fixed;
@@ -147,9 +223,9 @@ body::before{
   z-index: 5;
 }
 .flash-answer::before{
-  animation: dimGlobal 140ms ease-out;
+  animation: dimPulse 140ms ease-out;
 }
-@keyframes dimGlobal{
+@keyframes dimPulse{
   0%{opacity:0;}
   40%{opacity:0.12;}
   100%{opacity:0;}
@@ -158,267 +234,28 @@ body::before{
   .flash-answer::before{ animation:none; }
 }
 
-/* --- Home: même cadre + image dans le cercle --- */
-.card.home .circle{
-  border: 6px solid #fff;
+
+/* =========================
+   ACCUEIL : image pleine tuile (sans contour gris)
+   ========================= */
+
+/* Le fond autour de la tuile d'accueil */
+.screen:has(.card.home){
+  background-color:#000;
 }
+
+/* La tuile d'accueil : fond noir et pas de padding (sinon on voit le fond) */
+.card.home{
+  background:#000 !important;
+  padding:0 !important;
+  overflow:hidden; /* coupe l'image aux coins arrondis */
+}
+
+/* Image d'accueil : couvre toute la tuile */
 .card.home .home-image{
+  width:100%;
+  height:100%;
   display:block;
-  width: 62%;
-  height: 62%;
-  object-fit: contain;
-}
-.card.question .home-image,
-.card.answer .home-image{ display:none; }
-
-/* Sur l'accueil, on ne montre pas le texte */
-.card.home #content{ display:none; }
-
-/* Usage des polices */
-.q-line1, .a-line1{
-  font-family: "InterExtraBold", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-}
-.q-line2, .a-line2{
-  font-family: "InterSemiBold", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-}
-.italic{ font-family: "InterItalic", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-
-/* --- Tuiles: fond noir (accueil, question, réponse) --- */
-.card.home,
-.card.question,
-.card.answer{
-  background:#000;
-  color:#fff;
+  object-fit:cover; /* au lieu de contain */
 }
 
-/* --- Cercle légèrement plus grand --- */
-.circle{
-  width: min(82vmin, 700px);
-  height: min(82vmin, 700px);
-}
-
-/* Deuxième ligne: pas en gras */
-.q-line2, .a-line2{
-  font-weight: 400;
-  opacity: 0.9;
-}
-
-/* === Correctifs v7 === */
-/* Réponses: fond noir (forcer) */
-.card.answer{
-  background:#000 !important;
-  color:#fff !important;
-}
-
-/* Opérateur de multiplication dans les questions: non gras */
-.mult{ font-weight:400 !important; }
-
-/* Cercle plus grand + un peu de padding pour éviter le débordement */
-.circle{
-  width: min(90vmin, 760px) !important;
-  height: min(90vmin, 760px) !important;
-  box-sizing: border-box;
-  padding: 28px;
-}
-
-/* === Correctifs v8 === */
-/* Tuiles réponses: fond blanc */
-.card.answer{
-  background:#fff !important;
-  color:#000 !important;
-}
-/* Opérateur multiplication non gras */
-.mult{ font-weight:400 !important; }
-
-/* === Correctifs v12 === */
-.card.home, .card.question{
-  background:#000 !important;
-  color:#fff !important;
-}
-.card.answer{
-  background:#fff !important;
-  color:#000 !important;
-}
-
-/* q-line1 container NOT bold; bold is applied only to .qb */
-.q-line1{ font-weight: 400 !important; }
-.qb{ font-weight: 800; }
-.mult{ font-weight: 400 !important; }
-
-/* Deuxième ligne question jamais en gras */
-.q-line2{ font-weight: 400 !important; }
-
-/* Cercle: assez grand pour contenir le texte */
-.circle{
-  width: min(92vmin, 820px) !important;
-  height: min(92vmin, 820px) !important;
-  padding: 28px;
-  box-sizing: border-box;
-}
-
-/* === Correctifs v13 === */
-/* Deuxième ligne des questions : jamais en gras */
-.q-line2{
-  font-weight: 400 !important;
-}
-
-/* Opérateur multiplication jamais en gras */
-.mult{
-  font-weight: 400 !important;
-}
-
-/* === Correctifs v14 (typographie) === */
-/* IMPORTANT: Inter-SemiBold/ExtraBold sont des fichiers statiques: même avec font-weight:400, ils restent visuellement gras.
-   Donc, pour les éléments qui ne doivent JAMAIS être en gras (q-line2, parenthèses), on force une police régulière système. */
-
-/* Ligne 1: le gras est appliqué uniquement via .qb */
-.q-line1, .a-line1{
-  font-family: "InterExtraBold", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  font-weight: 400; /* le fichier ExtraBold porte le poids visuel; on évite d'ajouter du gras CSS */
-}
-
-/* Texte A et B en gras (fichier ExtraBold) */
-.qb{
-  font-family: "InterExtraBold", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  font-weight: 400;
-}
-
-/* Opérateur × : police régulière + non gras */
-.mult{
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
-  font-weight: 400 !important;
-}
-
-/* Deuxième ligne des questions: jamais en gras (ex: (A)) */
-.q-line2{
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
-  font-weight: 400 !important;
-}
-
-/* Deuxième ligne des réponses: parenthèses non grasses */
-.a-line2{
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
-  font-weight: 400 !important;
-}
-
-/* Lettre/symbole en italique: Inter italique réel */
-/* Italique mathématique avec empattements (I, Q, E, etc.) */
-.italic{
-  font-family: "STIXTwoTextItalic", "InterItalic", serif !important;
-  font-style: italic;
-  font-weight: 400 !important;
-}
-
-
-/* === Typographie finale cohérente (v15) === */
-
-/* Ligne 1 : texte principal */
-.qb{
-  font-family: "InterExtraBold", "InterRegular", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  font-weight: 400;
-}
-
-/* Conteneurs ne forcent aucun gras */
-.q-line1, .a-line1{
-  font-weight: 400;
-}
-
-/* Opérateur multiplication : régulier */
-.mult{
-  font-family: "InterRegular", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
-  font-weight: 400 !important;
-}
-
-/* Deuxième ligne question (ex: (A)) */
-.q-line2{
-  font-family: "InterRegular", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
-  font-weight: 400 !important;
-}
-
-/* Deuxième ligne réponse : parenthèses régulières */
-.a-line2{
-  font-family: "InterRegular", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
-  font-weight: 400 !important;
-}
-
-
-/* === Correctif v16 : empêcher le retour à la ligne sur le titre === */
-.q-line1{
-  white-space: nowrap;
-  text-wrap: nowrap;
-  line-height: 1.05;
-  font-size: clamp(42px, 8vw, 120px);
-}
-
-/* === Correctifs v17 === */
-/* Cercle questions : plus d'espace intérieur pour éviter que le texte touche le cercle */
-.card.question .circle{
-  width: min(96vmin, 900px) !important;
-  height: min(96vmin, 900px) !important;
-  padding: 16px !important;
-  box-sizing: border-box;
-}
-
-/* Titre (ligne 1) : jamais sur 2 lignes + autoshrink plus agressif */
-.q-line1{
-  white-space: nowrap;
-  text-wrap: nowrap;
-  max-width: 100%;
-  font-size: clamp(42px, 7vw, 110px) !important;
-}
-
-/* Réponse (ligne 1) : éviter le retour à la ligne (ex: Watt-heure) */
-.a-line1{
-  white-space: nowrap;
-  text-wrap: nowrap;
-  max-width: 100%;
-  font-size: clamp(42px, 7vw, 110px) !important;
-}
-
-/* Opérateur multiplication + trait d’union : Inter Regular, non gras */
-.mult,
-.hyph{
-  font-family: "InterRegular", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
-  font-weight: 400 !important;
-}
-
-/* Correction centrage réel pour textes composés (Ampère-heure, A × B) */
-.q-line1,
-.a-line1{
-  display: flex;
-  justify-content: center;
-  align-items: baseline;
-  gap: 0;
-  width: 100%;
-}
-
-html, body{
-  width: 100%;
-  overflow-x: hidden;
-}
-
-.card{
-  width: 100%;
-}
-
-body{
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
-  box-sizing: border-box;
-}
-
-/* === Ajustement cercle QUESTIONS (plus petit) === */
-.card.question .circle{
-  width: min(92vmin, 860px) !important;
-  height: min(92vmin, 860px) !important;
-  padding: 18px !important; /* garde un peu d'air sans trop agrandir */
-  box-sizing: border-box;
-}
-
-
-
-
-/* Shrink-wrap des lignes pour mesures fiables (×, -) */
-.q-line1,.q-line2,.a-line1,.a-line2{ display:inline-block; max-width:100%; }
-.q-line1,.a-line1{ white-space:nowrap; }
-.q-line2,.a-line2{ white-space:normal; }
