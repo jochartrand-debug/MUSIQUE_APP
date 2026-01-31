@@ -1,15 +1,3 @@
-// --- Anti double-tap lock (v43) ---
-let __tapLocked = false;
-function __withTapLock(fn, delay=300){
-  return function(...args){
-    if (__tapLocked) return;
-    __tapLocked = true;
-    try { fn.apply(this, args); }
-    finally { setTimeout(()=>{ __tapLocked = false; }, delay); }
-  }
-}
-// --- end anti double-tap ---
-
 // ---------------- IndexedDB ----------------
 const DB_NAME = "intervalles_pwa";
 const DB_VER = 1;
@@ -73,10 +61,6 @@ function shuffledIndices(n) {
   return a;
 }
 
-
-
-
-
 function formatQuestionTwoLines(q) {
   const s = (q ?? '').trim();
   if (!s) return '';
@@ -100,9 +84,9 @@ function formatQuestionTwoLines(q) {
     }
   }
 
-  if (!line2) return renderNoteMarkup(line1);
-  return `<span class="q-line1">${renderNoteMarkup(line1)}</span>
-<span class="q-line2">${wrapAccidentals(line2)}</span>`;
+  if (!line2) return applyPuristItalicMarkup(renderNoteMarkup(line1));
+  return `<span class="q-line1">${applyPuristItalicMarkup(renderNoteMarkup(line1))}</span>
+<span class="q-line2">${applyPuristItalicMarkup(wrapAccidentals(line2))}</span>`;
 }
 
 function wrapAccidentals(str){
@@ -122,12 +106,11 @@ function renderNoteMarkup(str){
   return `<span class="note-letter">${letter}</span><span class="accidental">${accNorm}</span>`;
 }
 
-
-
 // ---------------- UI ----------------
 const card = document.getElementById("card");
 const elContent = document.getElementById("content");
 const homeImg = document.getElementById("homeImg");
+const elCard = card;
 
 const themeToggleBtn = document.getElementById("themeToggle");
 
@@ -153,8 +136,11 @@ const tapArea = document.getElementById("tapArea");
 
 // État
 let data = [];
+let skipNextAppear = false;
+let tapLocked = false;
+
 let state = {
-  mode: "home",      // "home" | "question" | "answer"
+  mode: "home",
   deck: [],
   pos: 0,
   currentIndex: null
@@ -176,68 +162,99 @@ function pickNextQuestion() {
   state.mode = "question";
 }
 
-// Petite transition douce du texte
-function flashAnswer(){
-  const el = document.body;
-  el.classList.remove("flash-answer");
-  requestAnimationFrame(() => {
-    el.classList.add("flash-answer");
-    setTimeout(() => el.classList.remove("flash-answer"), 200);
-  });
+// ============ TRANSITION (DIM PULSE) ============
+
+async function playPoof() {
+  // DIM GLOBAL minimaliste (QUESTION → RÉPONSE)
+  document.body.classList.add("flash-answer");
+
+  await new Promise(r => setTimeout(r, 140));
+
+  document.body.classList.remove("flash-answer");
+}
+
+function playAppear() {
+  card.classList.add('appearing');
+  setTimeout(() => card.classList.remove('appearing'), 400);
+}
+
+function applyPuristItalicMarkup(html){
+  // Convertit <i> / <em> en <span class="italic"> pour que l’italique utilise STIX
+  // (évite le faux italique du navigateur et garantit un I majuscule distinct de l minuscule).
+  return String(html ?? "")
+    .replace(/<\s*(i|em)\s*>/gi, '<span class="italic">')
+    .replace(/<\s*\/\s*(i|em)\s*>/gi, '</span>');
+}
+
+function renderPlain(s){
+  return String(s);
 }
 
 function render() {
   card.className = "card " + state.mode;
+  card.classList.toggle("is-question", state.mode === "question");
+  card.classList.toggle("is-answer", state.mode === "answer");
 
   if (state.mode === "home") {
-  card.className = "card home";
-  if (homeImg) homeImg.src = "assets/accueil.png";
-  return;
-}
+    card.className = "card home";
+    if (homeImg) homeImg.src = "assets/accueil.png";
+    return;
+  }
 
   if (state.mode === "question") {
-    elContent.innerHTML = formatQuestionTwoLines(data[state.currentIndex]?.q ?? "—");
-    return;
+    const q = data[state.currentIndex]?.q ?? "—";
+    const prettyQ = q.replace(/×/g, '<span class="op">×</span>');
+    elContent.innerHTML = `<span class="q-single">${applyPuristItalicMarkup(prettyQ)}</span>`;
+    if (!skipNextAppear) playAppear();
+    skipNextAppear = false;
   }
 
   if (state.mode === "answer") {
     const answer = data[state.currentIndex]?.a ?? "—";
-    flashAnswer();
-    elContent.innerHTML = `<span class="a-line">${renderNoteMarkup(answer)}</span>`;
+    elContent.innerHTML = `<span class="a-line">${applyPuristItalicMarkup(renderNoteMarkup(answer))}</span>`;
+    playAppear();
     return;
   }
 }
 
-// Flow:
-// Accueil -> Question aléatoire (sans répétition)
-// Question -> Réponse
-// Réponse -> Nouvelle question (sans répétition)
-// Après toutes les paires -> retour Accueil + reset
 async function handleTap() {
-  if (state.mode === "home") {
-    pickNextQuestion();
-    render();
-    await idbSet("state", state);
-    return;
-  }
+  if (tapLocked) return;
+  tapLocked = true;
 
-  if (state.mode === "question") {
-    state.mode = "answer";
-    render();
-    await idbSet("state", state);
-    return;
-  }
+  try {
+    if (state.mode === "home") {
+      pickNextQuestion();
+      render();
+      await idbSet("state", state);
+      return;
+    }
 
-  if (state.mode === "answer") {
-    pickNextQuestion(); // si fini: home + reset
-    render();
-    await idbSet("state", state);
-    return;
+    if (state.mode === "question") {
+      // POOF spectaculaire !
+      await playPoof();
+      state.mode = "answer";
+      render();
+      await idbSet("state", state);
+      return;
+    }
+
+    if (state.mode === "answer") {
+      // AUCUNE transition entre la réponse et la question suivante
+      skipNextAppear = true;
+      pickNextQuestion();
+      render();
+      await idbSet("state", state);
+      return;
+    }
+  } finally {
+    // Anti double-tap iOS/PWA : ignore les événements répétés sur une courte fenêtre
+    setTimeout(() => {
+      tapLocked = false;
+    }, 350);
   }
 }
 
 async function boot() {
-  // Thème pédagogique (question/réponse inversables)
   applyScheme(getSavedScheme());
   if (themeToggleBtn) {
     themeToggleBtn.addEventListener("click", (e) => {
@@ -259,11 +276,9 @@ async function boot() {
   const saved = await idbGet("state");
   if (saved && typeof saved === "object") state = saved;
 
-  // Toujours démarrer à l’accueil (évite de reprendre sur une question après une session)
   state.mode = "home";
   state.currentIndex = null;
 
-  // Si data.json a changé, on reconstruit
   if (!Array.isArray(state.deck) || state.deck.length !== data.length) {
     resetDeck();
     state.mode = "home";
@@ -272,24 +287,7 @@ async function boot() {
   render();
   await idbSet("state", state);
 
-  // --- Robust anti double-tap (touch + click) ---
-  // iOS déclenche souvent: touchend -> click (après ~300ms).
-  // On traite touchend et on supprime le click suivant.
-  const __lockedHandleTap = __withTapLock(handleTap, 350);
-  let __suppressClickUntil = 0;
-
-  tapArea.addEventListener("touchend", (e) => {
-    e.preventDefault();
-    __suppressClickUntil = Date.now() + 450;
-    __lockedHandleTap();
-  }, { passive: false });
-
-  tapArea.addEventListener("click", (e) => {
-    if (Date.now() < __suppressClickUntil) return;
-    e.preventDefault();
-    __lockedHandleTap();
-  });
-// --- end robust anti double-tap ---
+  tapArea.addEventListener("click", handleTap);
 }
 
 boot().catch(err => {
