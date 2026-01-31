@@ -1,35 +1,19 @@
-const CACHE = "intervalles-cache-v43";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js",
   "./manifest.webmanifest",
-  "./data.json",  "./assets/accueil.png",
-  "./favicon.ico",
+  "./sw.js",
+  "./assets/accueil.png",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
-  "./icons/apple-touch-icon.png",
-  "./icons/apple-touch-icon-167.png",
-  "./icons/apple-touch-icon-152.png",
-  "./icons/apple-touch-icon-120.png",
-  "./icons/favicon-32.png",
+
+  // Polices
+  "./fonts/Inter-Regular.woff2",
+  "./fonts/Inter-SemiBold.woff2",
+  "./fonts/Inter-Bold.woff2",
+  "./fonts/Inter-ExtraBold.woff2",
+  "./fonts/Inter-Italic.woff2",
+  "./fonts/STIXTwoText-Italic.ttf"
 ];
-
-self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
-});
-
-self.addEventListener("activate", (e) => {
-  e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    )
-  );
-});
-
-self.addEventListener("fetch", (e) => {
-  e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request))
-  );
-});
