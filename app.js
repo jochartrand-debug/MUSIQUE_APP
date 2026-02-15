@@ -81,34 +81,26 @@ function formatQuestionTwoLines(q) {
   const s = (q ?? '').trim();
   if (!s) return '';
 
-  // Règles spéciales (avec inversion Q/R):
-  // 1) "G/e" : tout sur la 1re ligne, "/" non gras, note de droite en minuscule.
-  // 2) "B♭-E♭" : tout sur la 1re ligne (évite le split automatique).
+  // Règles spéciales (inversion Q/R):
+  // 1) "G/e" : 1re ligne, "/" non gras, note droite en minuscule (préservée).
+  // 2) "B♭-E♭" : 1re ligne (évite le split).
   if (!s.includes("\n")) {
     if (s.includes("/")) {
       const parts = s.split("/");
       if (parts.length === 2) {
         const left = parts[0].trim();
-        const right = parts[1].trim();
+        const right = parts[1].trim().toLowerCase();
         if (left && right) {
-          const rightLower = right.toLowerCase();
-          return `<span class="q-line1">${renderNoteMarkup(left)}<span class="slash">/</span>${renderNoteMarkup(rightLower)}</span>`;
+          return `<span class=\"q-line1\">${renderNoteMarkup(left)}<span class=\"slash\">/</span>${renderNoteMarkupPreserveCase(right)}</span>`;
         }
       }
     }
     if (s.includes("-")) {
-      return `<span class="q-line1">${wrapAccidentals(s)}</span>`;
+      return `<span class=\"q-line1\">${wrapAccidentals(s)}</span>`;
     }
   }
 
-// Si la question contient un trait d'union entre deux notes (ex: "B♭-E♭"),
-  // on garde TOUT sur la 1re ligne.
-  if (!s.includes('\n') && /[-–—]/.test(s) && /^[A-Ga-g]/.test(s)) {
-    return `<span class="q-line1">${renderInlineNotes(s)}</span>`;
-  }
-
-
-  let line1 = s;
+let line1 = s;
   let line2 = '';
 
   if (s.includes('\n')) {
@@ -138,53 +130,30 @@ function wrapAccidentals(str){
     .replace(/([b♭])/g, '<span class="accidental">$1</span>');
 }
 
-function renderNoteMarkup(str, forceLower=false){
+function renderNoteMarkup(str){
   const s = String(str ?? "");
   const m = s.match(/^\s*([A-Ga-g])\s*([#♯b♭])?\s*$/);
   if (!m) return wrapAccidentals(s);
-
-  const rawLetter = m[1];
-  const letter = forceLower ? rawLetter.toLowerCase() : rawLetter.toUpperCase();
+  const letter = m[1].toUpperCase();
   const acc = m[2] ? m[2] : "";
   const accNorm = acc === "#" ? "♯" : (acc === "b" ? "♭" : acc);
-
   if (!accNorm) return `<span class="note-letter">${letter}</span>`;
   return `<span class="note-letter">${letter}</span><span class="accidental">${accNorm}</span>`;
 }
 
-/**
- * Rend une chaîne contenant des notes isolées (ex: "B♭-E♭") en conservant la ponctuation,
- * sans transformer les lettres à l'intérieur de mots (ex: "maj7").
- */
-function renderInlineNotes(str){
+function renderNoteMarkupPreserveCase(str){
   const s = String(str ?? "");
-  return s.replace(/(^|[^A-Za-z])([A-Ga-g])\s*([#♯b♭])?(?=[^A-Za-z]|$)/g, (m, pre, ltr, acc) => {
-    const token = `${ltr}${acc ?? ""}`;
-    return pre + renderNoteMarkup(token);
-  });
+  const m = s.match(/^\s*([A-Ga-g])\s*([#♯b♭])?\s*$/);
+  if (!m) return wrapAccidentals(s);
+  const letter = m[1]; // preserve case
+  const acc = m[2] ? m[2] : "";
+  const accNorm = acc === "#" ? "♯" : (acc === "b" ? "♭" : acc);
+  if (!accNorm) return `<span class="note-letter">${letter}</span>`;
+  return `<span class="note-letter">${letter}</span><span class="accidental">${accNorm}</span>`;
 }
 
 
 
-
-
-function renderAnswerMarkup(str){
-  const s = String(str ?? "").trim();
-  if (!s) return "—";
-
-  // Cas type: "F/d" ou "B♭/g" (un seul slash)
-  const parts = s.split("/");
-  if (parts.length === 2) {
-    const left = parts[0].trim();
-    const right = parts[1].trim();
-    if (left && right) {
-      // À droite du slash: lettre minuscule (ex: g)
-      return `${renderNoteMarkup(left)}<span class="slash">/</span>${renderNoteMarkup(right, true)}`;
-    }
-  }
-
-  return renderNoteMarkup(s);
-}
 
 // ---------------- UI ----------------
 const card = document.getElementById("card");
@@ -265,7 +234,7 @@ function render() {
   if (state.mode === "answer") {
     const answer = data[state.currentIndex]?.a ?? "—";
     flashAnswer();
-    elContent.innerHTML = `<span class="a-line">${renderAnswerMarkup(answer)}</span>`;
+    elContent.innerHTML = `<span class="a-line">${renderNoteMarkup(answer)}</span>`;
     return;
   }
 }
