@@ -81,15 +81,23 @@ function formatQuestionTwoLines(q) {
   const s = (q ?? '').trim();
   if (!s) return '';
 
-  // Si la question est de type "G/e" (un seul slash), on garde TOUT sur la 1re ligne,
-  // avec un séparateur non gras et la note de droite en minuscule.
-  const slashParts = (!s.includes('
-')) ? s.split('/') : [];
-  if (slashParts.length === 2) {
-    const left = slashParts[0].trim();
-    const right = slashParts[1].trim();
-    if (left && right) {
-      return `<span class="q-line1">${renderNoteMarkup(left)}<span class="slash">/</span>${renderNoteMarkup(right, true)}</span>`;
+  // Règles spéciales (avec inversion Q/R):
+  // 1) "G/e" : tout sur la 1re ligne, "/" non gras, note de droite en minuscule.
+  // 2) "B♭-E♭" : tout sur la 1re ligne (évite le split automatique).
+  if (!s.includes("\n")) {
+    if (s.includes("/")) {
+      const parts = s.split("/");
+      if (parts.length === 2) {
+        const left = parts[0].trim();
+        const right = parts[1].trim();
+        if (left && right) {
+          const rightLower = right.toLowerCase();
+          return `<span class="q-line1">${renderNoteMarkup(left)}<span class="slash">/</span>${renderNoteMarkup(rightLower)}</span>`;
+        }
+      }
+    }
+    if (s.includes("-")) {
+      return `<span class="q-line1">${wrapAccidentals(s)}</span>`;
     }
   }
 
