@@ -81,6 +81,13 @@ function formatQuestionTwoLines(q) {
   const s = (q ?? '').trim();
   if (!s) return '';
 
+  // Si la question contient un trait d'union entre deux notes (ex: "B♭-E♭"),
+  // on garde TOUT sur la 1re ligne.
+  if (!s.includes('\n') && /[-–—]/.test(s) && /^[A-Ga-g]/.test(s)) {
+    return `<span class="q-line1">${renderInlineNotes(s)}</span>`;
+  }
+
+
   let line1 = s;
   let line2 = '';
 
@@ -111,36 +118,53 @@ function wrapAccidentals(str){
     .replace(/([b♭])/g, '<span class="accidental">$1</span>');
 }
 
-function renderNoteMarkup(str){
+function renderNoteMarkup(str, forceLower=false){
   const s = String(str ?? "");
   const m = s.match(/^\s*([A-Ga-g])\s*([#♯b♭])?\s*$/);
   if (!m) return wrapAccidentals(s);
-  const letter = m[1].toUpperCase();
+
+  const rawLetter = m[1];
+  const letter = forceLower ? rawLetter.toLowerCase() : rawLetter.toUpperCase();
   const acc = m[2] ? m[2] : "";
   const accNorm = acc === "#" ? "♯" : (acc === "b" ? "♭" : acc);
+
   if (!accNorm) return `<span class="note-letter">${letter}</span>`;
   return `<span class="note-letter">${letter}</span><span class="accidental">${accNorm}</span>`;
 }
+
+/**
+ * Rend une chaîne contenant des notes isolées (ex: "B♭-E♭") en conservant la ponctuation,
+ * sans transformer les lettres à l'intérieur de mots (ex: "maj7").
+ */
+function renderInlineNotes(str){
+  const s = String(str ?? "");
+  return s.replace(/(^|[^A-Za-z])([A-Ga-g])\s*([#♯b♭])?(?=[^A-Za-z]|$)/g, (m, pre, ltr, acc) => {
+    const token = `${ltr}${acc ?? ""}`;
+    return pre + renderNoteMarkup(token);
+  });
+}
+
+
+
+
 
 function renderAnswerMarkup(str){
   const s = String(str ?? "").trim();
   if (!s) return "—";
 
-  // Cas type: "F/d" (un seul slash)
+  // Cas type: "F/d" ou "B♭/g" (un seul slash)
   const parts = s.split("/");
   if (parts.length === 2) {
     const left = parts[0].trim();
     const right = parts[1].trim();
     if (left && right) {
-      return `${renderNoteMarkup(left)}<span class="slash">/</span>${renderNoteMarkup(right)}`;
+      // À droite du slash: lettre minuscule (ex: g)
+      return `${renderNoteMarkup(left)}<span class="slash">/</span>${renderNoteMarkup(right, true)}`;
     }
   }
-  // Sinon: rendu normal
+
   return renderNoteMarkup(s);
 }
-
-
-
 
 // ---------------- UI ----------------
 const card = document.getElementById("card");

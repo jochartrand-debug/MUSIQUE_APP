@@ -259,6 +259,8 @@ body::before{
   object-fit:cover; /* au lieu de contain */
 }
 
+
+
 /* Slash "/" non gras dans les réponses du type F/d */
 .slash{
   font-weight: 400 !important;
