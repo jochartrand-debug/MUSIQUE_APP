@@ -122,6 +122,24 @@ function renderNoteMarkup(str){
   return `<span class="note-letter">${letter}</span><span class="accidental">${accNorm}</span>`;
 }
 
+function renderAnswerMarkup(str){
+  const s = String(str ?? "").trim();
+  if (!s) return "—";
+
+  // Cas type: "F/d" (un seul slash)
+  const parts = s.split("/");
+  if (parts.length === 2) {
+    const left = parts[0].trim();
+    const right = parts[1].trim();
+    if (left && right) {
+      return `${renderNoteMarkup(left)}<span class="slash">/</span>${renderNoteMarkup(right)}`;
+    }
+  }
+  // Sinon: rendu normal
+  return renderNoteMarkup(s);
+}
+
+
 
 
 // ---------------- UI ----------------
@@ -203,7 +221,7 @@ function render() {
   if (state.mode === "answer") {
     const answer = data[state.currentIndex]?.a ?? "—";
     flashAnswer();
-    elContent.innerHTML = `<span class="a-line">${renderNoteMarkup(answer)}</span>`;
+    elContent.innerHTML = `<span class="a-line">${renderAnswerMarkup(answer)}</span>`;
     return;
   }
 }
