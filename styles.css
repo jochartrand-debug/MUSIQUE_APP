@@ -266,10 +266,3 @@ body::before{
   font-weight: 400 !important;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
-
-
-/* Ponctuation non grasse */
-.hyphen, .slash{
-  font-weight: 400 !important;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-}
