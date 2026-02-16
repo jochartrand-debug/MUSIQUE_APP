@@ -170,28 +170,45 @@ function fitOneLine(el, container){
   const parent = container || el.parentElement;
   if (!parent) return;
 
-  // Reset any previous scaling
-  el.style.transform = "";
-  el.style.transformOrigin = "center center";
+  // Reset any previous scaling before measuring
+  el.style.transform = "scale(1)";
+  el.style.transformOrigin = "left center";
 
-  // Force measurement after styles applied
+  // Measure using actual rendered width (more reliable on iOS + after font swaps)
   const maxW = parent.clientWidth || 0;
-  const w = el.scrollWidth || 0;
+  const rect = el.getBoundingClientRect();
+  const w = rect.width || 0;
   if (!maxW || !w) return;
+
   if (w <= maxW) return;
 
-  const scale = Math.max(0.55, maxW / w);
+  let scale = maxW / w;
+  // Safety margin to avoid 1px clipping on iOS
+  scale = Math.max(0.45, Math.min(1, scale * 0.98));
   el.style.transform = `scale(${scale})`;
 }
 
 function afterRenderFit(){
-  requestAnimationFrame(() => {
+  // Multiple passes: iOS can change glyph widths after fonts finish loading
+  const run = () => {
     const seq = elContent.querySelector(".fit-one-line");
     if (seq) fitOneLine(seq, elContent);
+  };
+
+  requestAnimationFrame(() => {
+    run();
+    requestAnimationFrame(() => {
+      run();
+      setTimeout(run, 150);
+    });
   });
 }
 
 window.addEventListener("resize", () => afterRenderFit());
+
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(() => afterRenderFit()).catch(() => {});
+}
 // -------- end hyphen sequences --------
 
 
