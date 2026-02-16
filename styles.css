@@ -268,15 +268,8 @@ body::before{
 }
 
 
-/* --- Séquences avec traits d'union : une seule ligne + trait non gras --- */
-.fit-one-line{
-  display:inline-block;
-  white-space: nowrap;
-  max-width: 100%;
-}
-
-.hyphen{
+/* Ponctuation non grasse */
+.hyphen, .slash{
   font-weight: 400 !important;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
-

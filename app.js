@@ -81,7 +81,26 @@ function formatQuestionTwoLines(q) {
   const s = (q ?? '').trim();
   if (!s) return '';
 
-  let line1 = s;
+  // Règles spéciales (inversion Q/R):
+  // 1) "G/e" : 1re ligne, "/" non gras, note droite en minuscule (préservée).
+  // 2) "B♭-E♭" : 1re ligne (évite le split).
+  if (!s.includes("\n")) {
+    if (s.includes("/")) {
+      const parts = s.split("/");
+      if (parts.length === 2) {
+        const left = parts[0].trim();
+        const right = parts[1].trim().toLowerCase();
+        if (left && right) {
+          return `<span class=\"q-line1\">${renderNoteMarkup(left)}<span class=\"slash\">/</span>${renderNoteMarkupPreserveCase(right)}</span>`;
+        }
+      }
+    }
+    if (s.includes("-")) {
+      return `<span class=\"q-line1\">${wrapAccidentals(s)}</span>`;
+    }
+  }
+
+let line1 = s;
   let line2 = '';
 
   if (s.includes('\n')) {
@@ -92,16 +111,10 @@ function formatQuestionTwoLines(q) {
       line1 = m[1];
       line2 = m[2];
     } else {
-      // Ne séparer sans espace QUE si la "suite" ressemble vraiment à une extension/intervalle
-      // (ex: C♭9, C#11, C m3, etc.). Sinon, garder tout sur une seule ligne (ex: C/a).
       const m2 = s.match(/^([A-G](?:♭|♯)?)\s*(.+)$/);
       if (m2) {
-        const rest = m2[2].trim();
-        // On split seulement si rest commence par un chiffre ou par b/#/♭/♯/m/M (typique des intervalles/altérations)
-        if (/^(?:\d|[b#♭♯mM])/.test(rest)) {
-          line1 = m2[1];
-          line2 = rest;
-        }
+        line1 = m2[1];
+        line2 = m2[2];
       }
     }
   }
@@ -127,6 +140,25 @@ function renderNoteMarkup(str){
   if (!accNorm) return `<span class="note-letter">${letter}</span>`;
   return `<span class="note-letter">${letter}</span><span class="accidental">${accNorm}</span>`;
 }
+
+
+function wrapPunct(str){
+  return String(str ?? "")
+    .replace(/-/g, '<span class="hyphen">-</span>')
+    .replace(/\//g, '<span class="slash">/</span>');
+}
+
+function renderNoteMarkupPreserveCase(str){
+  const s = String(str ?? "");
+  const m = s.match(/^\s*([A-Ga-g])\s*([#♯b♭])?\s*$/);
+  if (!m) return wrapAccidentals(s);
+  const letter = m[1]; // preserve case
+  const acc = m[2] ? m[2] : "";
+  const accNorm = acc === "#" ? "♯" : (acc === "b" ? "♭" : acc);
+  if (!accNorm) return `<span class="note-letter">${letter}</span>`;
+  return `<span class="note-letter">${letter}</span><span class="accidental">${accNorm}</span>`;
+}
+
 
 
 
