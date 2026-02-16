@@ -92,10 +92,16 @@ function formatQuestionTwoLines(q) {
       line1 = m[1];
       line2 = m[2];
     } else {
+      // Ne séparer sans espace QUE si la "suite" ressemble vraiment à une extension/intervalle
+      // (ex: C♭9, C#11, C m3, etc.). Sinon, garder tout sur une seule ligne (ex: C/a).
       const m2 = s.match(/^([A-G](?:♭|♯)?)\s*(.+)$/);
       if (m2) {
-        line1 = m2[1];
-        line2 = m2[2];
+        const rest = m2[2].trim();
+        // On split seulement si rest commence par un chiffre ou par b/#/♭/♯/m/M (typique des intervalles/altérations)
+        if (/^(?:\d|[b#♭♯mM])/.test(rest)) {
+          line1 = m2[1];
+          line2 = rest;
+        }
       }
     }
   }
