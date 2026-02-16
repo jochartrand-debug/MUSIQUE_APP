@@ -81,26 +81,7 @@ function formatQuestionTwoLines(q) {
   const s = (q ?? '').trim();
   if (!s) return '';
 
-  // Règles spéciales (inversion Q/R):
-  // 1) "G/e" : 1re ligne, "/" non gras, note droite en minuscule (préservée).
-  // 2) "B♭-E♭" : 1re ligne (évite le split).
-  if (!s.includes("\n")) {
-    if (s.includes("/")) {
-      const parts = s.split("/");
-      if (parts.length === 2) {
-        const left = parts[0].trim();
-        const right = parts[1].trim().toLowerCase();
-        if (left && right) {
-          return `<span class=\"q-line1\">${renderNoteMarkup(left)}<span class=\"slash\">/</span>${renderNoteMarkupPreserveCase(right)}</span>`;
-        }
-      }
-    }
-    if (s.includes("-")) {
-      return `<span class=\"q-line1 fit-one-line\">${renderHyphenSequence(s, true)}</span>`;
-    }
-  }
-
-let line1 = s;
+  let line1 = s;
   let line2 = '';
 
   if (s.includes('\n')) {
@@ -140,79 +121,6 @@ function renderNoteMarkup(str){
   if (!accNorm) return `<span class="note-letter">${letter}</span>`;
   return `<span class="note-letter">${letter}</span><span class="accidental">${accNorm}</span>`;
 }
-
-function renderNoteMarkupPreserveCase(str){
-  const s = String(str ?? "");
-  const m = s.match(/^\s*([A-Ga-g])\s*([#♯b♭])?\s*$/);
-  if (!m) return wrapAccidentals(s);
-  const letter = m[1]; // preserve case
-  const acc = m[2] ? m[2] : "";
-  const accNorm = acc === "#" ? "♯" : (acc === "b" ? "♭" : acc);
-  if (!accNorm) return `<span class="note-letter">${letter}</span>`;
-  return `<span class="note-letter">${letter}</span><span class="accidental">${accNorm}</span>`;
-}
-
-// -------- Hyphen sequences (B♭-E♭-A♭-...) + one-line fit --------
-function renderHyphenSequence(str, preserveCase=false){
-  const raw = String(str ?? "");
-  const parts = raw.split("-").map(p => p.trim()).filter(Boolean);
-  if (!parts.length) return "";
-  const render = preserveCase ? renderNoteMarkupPreserveCase : renderNoteMarkup;
-  return parts.map((p, i) => {
-    const note = render(p);
-    return (i === 0) ? note : `<span class="hyphen">-</span>${note}`;
-  }).join("");
-}
-
-// Scale a target element so it fits on ONE line inside its container width.
-function fitOneLine(el, container){
-  if (!el) return;
-  const parent = container || el.parentElement;
-  if (!parent) return;
-
-  // Reset any previous scaling before measuring
-  el.style.transform = "scale(1)";
-  el.style.transformOrigin = "left center";
-
-  // Measure using actual rendered width (more reliable on iOS + after font swaps)
-  const maxW = parent.clientWidth || 0;
-  const rect = el.getBoundingClientRect();
-  const w = rect.width || 0;
-  if (!maxW || !w) return;
-
-  if (w <= maxW) return;
-
-  let scale = maxW / w;
-  // Safety margin to avoid 1px clipping on iOS
-  scale = Math.max(0.45, Math.min(1, scale * 0.98));
-  el.style.transform = `scale(${scale})`;
-}
-
-function afterRenderFit(){
-  // Multiple passes: iOS can change glyph widths after fonts finish loading
-  const run = () => {
-    const seq = elContent.querySelector(".fit-one-line");
-    if (seq) fitOneLine(seq, elContent);
-  };
-
-  requestAnimationFrame(() => {
-    run();
-    requestAnimationFrame(() => {
-      run();
-      setTimeout(run, 150);
-    });
-  });
-}
-
-window.addEventListener("resize", () => afterRenderFit());
-
-if (document.fonts && document.fonts.ready) {
-  document.fonts.ready.then(() => afterRenderFit()).catch(() => {});
-}
-// -------- end hyphen sequences --------
-
-
-
 
 
 
@@ -289,19 +197,13 @@ function render() {
 
   if (state.mode === "question") {
     elContent.innerHTML = formatQuestionTwoLines(data[state.currentIndex]?.q ?? "—");
-    afterRenderFit();
     return;
   }
 
   if (state.mode === "answer") {
     const answer = data[state.currentIndex]?.a ?? "—";
     flashAnswer();
-    if (String(answer).includes("-")) {
-      elContent.innerHTML = `<span class="a-line fit-one-line">${renderHyphenSequence(answer)}</span>`;
-    } else {
-      elContent.innerHTML = `<span class="a-line">${renderNoteMarkup(answer)}</span>`;
-    }
-    afterRenderFit();
+    elContent.innerHTML = `<span class="a-line">${renderNoteMarkup(answer)}</span>`;
     return;
   }
 }
