@@ -8,7 +8,7 @@
   { "q": "min(Maj7)", "a": "Min Mélo" },
   { "q": "sus", "a": "Dorien ♭2" },
   { "q": "Maj7(♯5)", "a": "Lydien aug" },
-  { "q": "Dominant 7(♯11)", "a": "Lydien ♭7" },
+  { "q": "Dominant7(♯11)", "a": "Lydien ♭7" },
   { "q": "Hindous", "a": "Mix ♭13" },
   { "q": "Altéré", "a": "Super Locrien" },
 
