@@ -81,26 +81,7 @@ function formatQuestionTwoLines(q) {
   const s = (q ?? '').trim();
   if (!s) return '';
 
-  // Règles spéciales (inversion Q/R):
-  // 1) "G/e" : 1re ligne, "/" non gras, note droite en minuscule (préservée).
-  // 2) "B♭-E♭" : 1re ligne (évite le split).
-  if (!s.includes("\n")) {
-    if (s.includes("/")) {
-      const parts = s.split("/");
-      if (parts.length === 2) {
-        const left = parts[0].trim();
-        const right = parts[1].trim().toLowerCase();
-        if (left && right) {
-          return `<span class=\"q-line1\">${renderNoteMarkup(left)}<span class=\"slash\">/</span>${renderNoteMarkupPreserveCase(right)}</span>`;
-        }
-      }
-    }
-    if (s.includes("-")) {
-      return `<span class=\"q-line1\">${wrapAccidentals(s)}</span>`;
-    }
-  }
-
-let line1 = s;
+  let line1 = s;
   let line2 = '';
 
   if (s.includes('\n')) {
@@ -140,25 +121,6 @@ function renderNoteMarkup(str){
   if (!accNorm) return `<span class="note-letter">${letter}</span>`;
   return `<span class="note-letter">${letter}</span><span class="accidental">${accNorm}</span>`;
 }
-
-
-function wrapPunct(str){
-  return String(str ?? "")
-    .replace(/-/g, '<span class="hyphen">-</span>')
-    .replace(/\//g, '<span class="slash">/</span>');
-}
-
-function renderNoteMarkupPreserveCase(str){
-  const s = String(str ?? "");
-  const m = s.match(/^\s*([A-Ga-g])\s*([#♯b♭])?\s*$/);
-  if (!m) return wrapAccidentals(s);
-  const letter = m[1]; // preserve case
-  const acc = m[2] ? m[2] : "";
-  const accNorm = acc === "#" ? "♯" : (acc === "b" ? "♭" : acc);
-  if (!accNorm) return `<span class="note-letter">${letter}</span>`;
-  return `<span class="note-letter">${letter}</span><span class="accidental">${accNorm}</span>`;
-}
-
 
 
 

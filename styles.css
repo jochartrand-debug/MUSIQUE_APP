@@ -259,10 +259,3 @@ body::before{
   object-fit:cover; /* au lieu de contain */
 }
 
-
-
-/* Slash "/" non gras */
-.slash{
-  font-weight: 400 !important;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-}
