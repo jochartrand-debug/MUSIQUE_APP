@@ -241,7 +241,7 @@ function render() {
   if (state.mode === "answer") {
     const answer = data[state.currentIndex]?.a ?? "—";
     flashAnswer();
-    elContent.innerHTML = `<span class="a-line">${wrapPunct(renderNoteMarkup(answer))}</span>`;
+    elContent.innerHTML = `<span class="a-line">${renderNoteMarkup(answer)}</span>`;
     return;
   }
 }
