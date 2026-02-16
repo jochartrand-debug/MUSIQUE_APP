@@ -266,3 +266,17 @@ body::before{
   font-weight: 400 !important;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
+
+
+/* --- Séquences avec traits d'union : une seule ligne + trait non gras --- */
+.fit-one-line{
+  display:inline-block;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.hyphen{
+  font-weight: 400 !important;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+

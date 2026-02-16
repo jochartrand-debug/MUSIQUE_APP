@@ -96,7 +96,7 @@ function formatQuestionTwoLines(q) {
       }
     }
     if (s.includes("-")) {
-      return `<span class=\"q-line1\">${wrapAccidentals(s)}</span>`;
+      return `<span class=\"q-line1 fit-one-line\">${renderHyphenSequence(s, true)}</span>`;
     }
   }
 
@@ -151,6 +151,50 @@ function renderNoteMarkupPreserveCase(str){
   if (!accNorm) return `<span class="note-letter">${letter}</span>`;
   return `<span class="note-letter">${letter}</span><span class="accidental">${accNorm}</span>`;
 }
+
+// -------- Hyphen sequences (B♭-E♭-A♭-...) + one-line fit --------
+function renderHyphenSequence(str, preserveCase=false){
+  const raw = String(str ?? "");
+  const parts = raw.split("-").map(p => p.trim()).filter(Boolean);
+  if (!parts.length) return "";
+  const render = preserveCase ? renderNoteMarkupPreserveCase : renderNoteMarkup;
+  return parts.map((p, i) => {
+    const note = render(p);
+    return (i === 0) ? note : `<span class="hyphen">-</span>${note}`;
+  }).join("");
+}
+
+// Scale a target element so it fits on ONE line inside its container width.
+function fitOneLine(el, container){
+  if (!el) return;
+  const parent = container || el.parentElement;
+  if (!parent) return;
+
+  // Reset any previous scaling
+  el.style.transform = "";
+  el.style.transformOrigin = "center center";
+
+  // Force measurement after styles applied
+  const maxW = parent.clientWidth || 0;
+  const w = el.scrollWidth || 0;
+  if (!maxW || !w) return;
+  if (w <= maxW) return;
+
+  const scale = Math.max(0.55, maxW / w);
+  el.style.transform = `scale(${scale})`;
+}
+
+function afterRenderFit(){
+  requestAnimationFrame(() => {
+    const seq = elContent.querySelector(".fit-one-line");
+    if (seq) fitOneLine(seq, elContent);
+  });
+}
+
+window.addEventListener("resize", () => afterRenderFit());
+// -------- end hyphen sequences --------
+
+
 
 
 
@@ -228,13 +272,19 @@ function render() {
 
   if (state.mode === "question") {
     elContent.innerHTML = formatQuestionTwoLines(data[state.currentIndex]?.q ?? "—");
+    afterRenderFit();
     return;
   }
 
   if (state.mode === "answer") {
     const answer = data[state.currentIndex]?.a ?? "—";
     flashAnswer();
-    elContent.innerHTML = `<span class="a-line">${renderNoteMarkup(answer)}</span>`;
+    if (String(answer).includes("-")) {
+      elContent.innerHTML = `<span class="a-line fit-one-line">${renderHyphenSequence(answer)}</span>`;
+    } else {
+      elContent.innerHTML = `<span class="a-line">${renderNoteMarkup(answer)}</span>`;
+    }
+    afterRenderFit();
     return;
   }
 }
