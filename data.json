@@ -2,12 +2,13 @@
   
   { "q": "Maj7", "a": "Ion/Lyd" },
   { "q": "m7", "a": "Dorien" },
-  { "q": "7(dominant)", "a": "Mix" },
+  { "q": "7", "a": "Mix" },
   { "q": "m7(♭5)", "a": "Locrien Loc ♯2" },
 
   { "q": "min(Maj7)", "a": "Min Mélo" },
   { "q": "sus", "a": "Dorien ♭2" },
   { "q": "Maj7(♯5)", "a": "Lydien aug" },
+  { "q": "7(♯5)", "a": "Whole Tone" },
   { "q": "Dominant7(♯11)", "a": "Lydien ♭7" },
   { "q": "Hindous", "a": "Mix ♭13" },
   { "q": "Altéré", "a": "Super Locrien" },
