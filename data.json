@@ -2,24 +2,24 @@
   
   { "q": "maj7", "a": "Ion/Lyd" },
   { "q": "m7", "a": "Dorien" },
-  { "q": "7", "a": "Mix" },
+  { "q": "7", "a": "Mixo" },
   { "q": "m7(♭5)", "a": "Locrien" },
 
   { "q": "m(maj7)", "a": "Min Mélo" },
   { "q": "m7♭9/sus♭9", "a": "Dorien ♭2" },
   { "q": "maj7(♯5)", "a": "Lydien ♯5" },
   { "q": "7(♯11)", "a": "Lydien ♭7" },
-  { "q": "7♭13", "a": "Mix ♭13" },
+  { "q": "7♭13", "a": "Mixo ♭13" },
   { "q": "m7♭5(9)", "a": "Loc ♮2" },
   { "q": "7alt", "a": "Super Locrien" },
 
   { "q": "2-5-1 mMélo", "a": "Loc♮2-Alt-m(maj7)" },
   { "q": "2-5-1 mHarm", "a": "Loc♮6-PhrDom-m(maj7)" },
-  { "q": "2-5-1", "a": "dor-()-ion/lyd" },
+  { "q": "2-5-1", "a": "dor-(dominante)-ion/lyd" },
 
   { "q": "Mode3mMélo", "a": "Lydien ♯5" },
   { "q": "Mode4mMélo", "a": "Lydien ♭7" },
-  { "q": "Mode5mMélo", "a": "Mix ♭13" },
+  { "q": "Mode5mMélo", "a": "Mixo ♭13" },
   { "q": "Mode6mMélo", "a": "Loc ♮2" },
 
   { "q": "Mode2mHarm", "a": "Loc ♮6" },
@@ -57,7 +57,7 @@
   { "q": "♭3-♭7", "a": "Dorien" },
   { "q": "♭2-♭3-♭6-♭7", "a": "Phr" },
   { "q": "♯4", "a": "Lydien" },
-  { "q": "♭7", "a": "Mix" },
+  { "q": "♭7", "a": "Mixo" },
   { "q": "♭3-♭6-♭7", "a": "Éolien" },
   { "q": "♭2-♭3-♭5-♭6-♭7", "a": "Locrien" },
 
@@ -66,7 +66,7 @@
   { "q": "♭2-♭3-♭7", "a": "Dorien ♭2" },
   { "q": "♯4-♯5", "a": "Lydien ♯5" },
   { "q": "♯4-♭7", "a": "Lydien ♭7" },
-  { "q": "♭6-♭7", "a": "Mix ♭13" },
+  { "q": "♭6-♭7", "a": "Mixo ♭13" },
   { "q": "♭3-♭5-♭6-♭7", "a": "Loc ♮2" },
   { "q": "♭2-♯2-♭5-♯5-♭7", "a": "Super Locrien" },
 
