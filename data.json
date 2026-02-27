@@ -10,12 +10,14 @@
 
 
 
-  { "q": "maj7", "a": "Ion/Lyd" },
-  { "q": "m7", "a": "Dorien" },
-  { "q": "7", "a": "Mixo" },
-  { "q": "m7(♭5)", "a": "Locrien" },
+  { "q": "maj7(9)", "a": "Ionien" },
   { "q": "m7(11)", "a": "Dorien" },
-
+  { "q": "m7♭9", "a": "Phr" },
+  { "q": "maj7(♯11)", "a": "Lydien" },
+  { "q": "7", "a": "Mixo" },
+  { "q": "m7(♭13)", "a": "Éolien" },
+  { "q": "m7(♭5)", "a": "Locrien" },
+ 
   { "q": "m(maj7)", "a": "Min MéloHarm" },
   { "q": "m7♭9/sus♭9", "a": "Dorien ♭2" },
   { "q": "maj7(♯5)", "a": "Ion/Lyd ♯5" },
